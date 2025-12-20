@@ -19,7 +19,7 @@ const error = ref('');
 const fetchProjects = async () => {
   try {
     // 【重要】請將下面的 port 改成您後端實際執行的 port
-    const response = await axios.get('https://localhost:7068/api/projects'); 
+    const response = await axios.get('http://localhost:5214/api/projects'); 
     
     // .NET 預設回傳的 JSON 屬性通常是 camelCase (首字小寫)
     // 但如果後端沒設定，可能是 PascalCase (首字大寫)。
