@@ -1,0 +1,31 @@
+services:
+  # --- 後端服務 ---
+  backend:
+    build: 
+      context: ./Backend  # 指向後端資料夾
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080" # 左邊是您電腦的 Port，右邊是容器內的 Port
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - app-network
+
+  # --- 前端服務 ---
+  frontend:
+    build: 
+      context: ./Frontend # 指向前端資料夾
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:5000
+    ports:
+      - "5173:80"   # 左邊是您電腦的 Port (可自訂)，右邊是 Nginx 預設 Port
+    depends_on:
+      - backend     # 確保後端先啟動
+    networks:
+      - app-network
+
+# 定義一個虛擬網路，讓前後端可以互通
+networks:
+  app-network:
+    driver: bridge

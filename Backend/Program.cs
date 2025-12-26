@@ -15,6 +15,7 @@ builder.Services.AddCors(options =>
                           // 設定允許前端的網址 (Vue 預設是 http://localhost:5173)
                           // 如果您的 Vue port 不一樣，請改成您的 port
                           policy.WithOrigins("http://localhost:5173")
+                                .WithOrigins("https://2kiemw68nx.ap-northeast-1.awsapprunner.com")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
                       });
@@ -35,6 +36,25 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(connectionString));
 
 var app = builder.Build();
+
+// ---  新增這段：自動執行 Migration 與建立資料庫  ---
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>(); 
+        context.Database.Migrate(); 
+        // 修正點：移除可能造成編碼問題的特殊符號
+        Console.WriteLine("Database Migration Successful!"); 
+    }
+    catch (Exception ex)
+    {
+        // 修正點：避免在 $"" 中使用複雜路徑或特殊字元，改用一般字串相加
+        Console.WriteLine("Database Migration Failed: " + ex.Message);
+    }
+}
+// ---  新增結束   ---
 
 if (app.Environment.IsDevelopment())
 {

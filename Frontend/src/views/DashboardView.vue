@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import apiClient from '@/api/index.js' // 引入你剛寫好的 apiClient
 
 // 定義資料介面 (對應後端的 DTO)
 interface Project {
@@ -17,10 +17,8 @@ const error = ref('');
 
 // 2. 定義抓取資料的函式
 const fetchProjects = async () => {
-  try {
-    // 【重要】請將下面的 port 改成您後端實際執行的 port
-    const response = await axios.get('http://localhost:5214/api/projects'); 
-    
+  try { 
+    const response = await apiClient.get('/api/projects')
     // .NET 預設回傳的 JSON 屬性通常是 camelCase (首字小寫)
     // 但如果後端沒設定，可能是 PascalCase (首字大寫)。
     // 建議先 console.log(response.data) 確認一下
