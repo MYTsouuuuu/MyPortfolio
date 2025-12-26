@@ -10,7 +10,7 @@ interface Project {
   category: string;
 }
 
-// 1. 建立響應式變數，預設為空陣列
+// 1. 建立響應式變數，預設為空陣列 #
 const projects = ref<Project[]>([]);
 const loading = ref(true);
 const error = ref('');
