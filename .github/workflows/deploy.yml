@@ -3,7 +3,9 @@ name: Deploy Backend to AWS App Runner
 on:
   push:
     branches: [ "main" ] # 當 main 分支有更新時觸發
-
+  paths:
+    - 'Backend/**'           # 監聽後端資料夾 (請改成你的實際資料夾名稱)
+    - '.github/workflows/deploy.yml' # 監聽這個設定檔本身
 jobs:
   deploy:
     runs-on: ubuntu-latest # 使用 GitHub 提供的虛擬機
